@@ -169,6 +169,58 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"sale_items": {
+                  Row: {
+                    "business_id": string,"id": string,"line_cost": number,"line_total": number,"product_id": string,"product_name": string,"quantity": number,"sale_id": string,"unit": string,"unit_cost": number,"unit_price": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "business_id": string,"id"?: string,"line_cost": number,"line_total": number,"product_id": string,"product_name": string,"quantity": number,"sale_id": string,"unit": string,"unit_cost": number,"unit_price": number
+                  }
+                  Update: {
+                    "business_id"?: string,"id"?: string,"line_cost"?: number,"line_total"?: number,"product_id"?: string,"product_name"?: string,"quantity"?: number,"sale_id"?: string,"unit"?: string,"unit_cost"?: number,"unit_price"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sale_items_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "product_overview"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "sale_items_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "sale_items_business_id_sale_id_fkey"
+      columns: ["business_id","sale_id"]
+isOneToOne: false
+      referencedRelation: "sales"
+      referencedColumns: ["business_id","id"]
+    }
+                  ]
+                },"sales": {
+                  Row: {
+                    "business_id": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"cost_total": number,"created_at": string,"created_by": string | null,"currency": string,"discount_total": number,"id": string,"idempotency_key": string,"note": string | null,"number": number,"payment_method": string,"status": string,"subtotal": number,"total": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "business_id": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"cost_total": number,"created_at"?: string,"created_by"?: string | null,"currency": string,"discount_total"?: number,"id"?: string,"idempotency_key": string,"note"?: string | null,"number": number,"payment_method"?: string,"status"?: string,"subtotal": number,"total": number
+                  }
+                  Update: {
+                    "business_id"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"cost_total"?: number,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"discount_total"?: number,"id"?: string,"idempotency_key"?: string,"note"?: string | null,"number"?: number,"payment_method"?: string,"status"?: string,"subtotal"?: number,"total"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sales_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"stock_movements": {
                   Row: {
                     "average_cost_after": number,"balance_after": number,"business_id": string,"created_at": string,"created_by": string | null,"id": string,"idempotency_key": string | null,"movement_type": Database["public"]['Enums']["movement_type"],"product_id": string,"quantity_delta": number,"reason": string | null,"reference_id": string | null,"reference_type": string | null,"unit_cost": number
@@ -316,6 +368,9 @@ isOneToOne: true
             "adjust_stock":
 { Args: { "p_business_id": string,"p_counted_quantity": number,"p_idempotency_key"?: string,"p_product_id": string,"p_reason": string }; Returns: string
                            },
+"cancel_sale":
+{ Args: { "p_business_id": string,"p_reason": string,"p_sale_id": string }; Returns: undefined
+                           },
 "create_business":
 { Args: { "p_business_type"?: string,"p_name": string }; Returns: string
                            },
@@ -324,6 +379,9 @@ isOneToOne: true
                            },
 "create_product":
 { Args: { "p_barcode"?: string,"p_business_id": string,"p_category_id"?: string,"p_idempotency_key"?: string,"p_initial_quantity"?: number,"p_initial_unit_cost"?: number,"p_low_stock_threshold"?: number,"p_name": string,"p_sale_price": number,"p_sku"?: string,"p_unit"?: string }; Returns: string
+                           },
+"create_sale":
+{ Args: { "p_business_id": string,"p_discount"?: number,"p_idempotency_key": string,"p_items": Json,"p_note"?: string,"p_payment_method"?: string }; Returns: string
                            },
 "delete_category":
 { Args: { "p_business_id": string,"p_category_id": string }; Returns: undefined
@@ -337,8 +395,18 @@ isOneToOne: true
 "rename_category":
 { Args: { "p_business_id": string,"p_category_id": string,"p_name": string }; Returns: undefined
                            },
+"sales_summary":
+{ Args: { "p_business_id": string,"p_from": string,"p_to": string }; Returns: {
+              "cancelled_count": number,"cost_total": number,"discount_total": number,"gross_margin": number,"sales_count": number,"subtotal": number,"total": number
+            }[]
+                           },
 "set_product_active":
 { Args: { "p_active": boolean,"p_business_id": string,"p_product_id": string }; Returns: undefined
+                           },
+"top_products":
+{ Args: { "p_business_id": string,"p_from": string,"p_limit"?: number,"p_to": string }; Returns: {
+              "cost": number,"product_id": string,"product_name": string,"quantity": number,"revenue": number,"unit": string
+            }[]
                            },
 "update_business":
 { Args: { "p_business_id": string,"p_business_type"?: string,"p_name": string,"p_timezone"?: string }; Returns: undefined

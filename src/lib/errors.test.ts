@@ -12,9 +12,9 @@ describe('toUserMessage', () => {
   })
 
   it('traduce los códigos de error de Auth', () => {
-    expect(toUserMessage({ code: 'invalid_credentials', message: 'Invalid login credentials' })).toBe(
-      'Correo o contraseña incorrectos.',
-    )
+    expect(
+      toUserMessage({ code: 'invalid_credentials', message: 'Invalid login credentials' }),
+    ).toBe('Correo o contraseña incorrectos.')
   })
 
   it('reconoce fallos de red', () => {

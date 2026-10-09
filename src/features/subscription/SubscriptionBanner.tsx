@@ -23,8 +23,8 @@ export function SubscriptionBanner({ access }: { access: Access }) {
     case 'expired':
       return (
         <Alert tone="warning">
-          Tu periodo terminó. Tus datos están guardados y puedes consultarlos, pero no hacer
-          cambios hasta renovar.
+          Tu periodo terminó. Tus datos están guardados y puedes consultarlos, pero no hacer cambios
+          hasta renovar.
         </Alert>
       )
     case 'active':

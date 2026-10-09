@@ -38,6 +38,14 @@ const DB_MESSAGES: Record<string, string> = {
   import_ambiguous_match: 'La referencia y el código de barras corresponden a productos distintos.',
   invalid_import_id: 'No pudimos identificar la importación. Vuelve a empezar.',
   invalid_file_name: 'El nombre del archivo no es válido.',
+  invalid_idempotency_key: 'No pudimos identificar la operación. Recarga la página.',
+  sale_empty: 'Agrega al menos un producto a la venta.',
+  sale_too_many_items: 'Una venta puede tener máximo 100 productos distintos.',
+  sale_duplicate_item: 'Un producto aparece dos veces en la venta.',
+  sale_invalid_item: 'Hay un producto de la venta con datos inválidos.',
+  invalid_payment_method: 'El medio de pago no es válido.',
+  invalid_discount: 'El descuento no es válido o es mayor que el subtotal.',
+  sale_not_found: 'La venta ya no existe. Recarga la página.',
 }
 
 const AUTH_MESSAGES: Record<string, string> = {

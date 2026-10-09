@@ -1,12 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useDeferredValue, useState } from 'react'
+import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router'
 import { Alert } from '../../components/ui/Alert'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
-import { LinkButton } from '../../components/ui/LinkButton'
 import { SelectField } from '../../components/ui/SelectField'
 import { Spinner } from '../../components/ui/Spinner'
 import { TextField } from '../../components/ui/TextField'
@@ -14,13 +13,8 @@ import { normalizeDecimal, toDecimalInput } from '../../lib/decimal'
 import { toUserMessage } from '../../lib/errors'
 import { formatDelta, formatMoney, formatQuantity } from '../../lib/format'
 import { useActiveBusiness } from '../business/BusinessContext'
-import {
-  fetchProduct,
-  fetchProducts,
-  invalidateInventory,
-  productKeys,
-  type Product,
-} from '../products/api'
+import { fetchProduct, invalidateInventory, productKeys, type Product } from '../products/api'
+import { ProductPicker } from '../products/ProductPicker'
 import { unitShort } from '../products/units'
 import { useCanWrite } from '../subscription/useCanWrite'
 import { adjustStock, recordMovement } from './api'
@@ -227,62 +221,6 @@ function AdjustmentForm({ product }: { product: Product }) {
   )
 }
 
-function ProductPicker({ onPick }: { onPick: (productId: string) => void }) {
-  const business = useActiveBusiness()
-  const [search, setSearch] = useState('')
-  const deferredSearch = useDeferredValue(search)
-  const query = { filter: 'active' as const, search: deferredSearch, categoryId: null }
-
-  const products = useQuery({
-    queryKey: productKeys.list(business.id, query),
-    queryFn: () => fetchProducts(business.id, query),
-    placeholderData: (previous) => previous,
-  })
-  const results = (products.data ?? []).slice(0, 8)
-
-  return (
-    <div className="flex flex-col gap-3">
-      <TextField
-        label="¿Qué producto?"
-        type="search"
-        autoFocus
-        placeholder="Escribe el nombre, la referencia o el código"
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-      />
-      {products.isError ? (
-        <Alert tone="error">{toUserMessage(products.error)}</Alert>
-      ) : products.isPending ? (
-        <Spinner />
-      ) : results.length === 0 ? (
-        <p className="text-slate-600">
-          {deferredSearch.trim() ? 'No encontramos ese producto.' : 'Aún no tienes productos.'}{' '}
-          <LinkButton to="/productos/nuevo" variant="ghost" className="text-sm">
-            Crear producto
-          </LinkButton>
-        </p>
-      ) : (
-        <ul className="divide-y divide-slate-100 rounded-lg ring-1 ring-slate-200">
-          {results.map((product) => (
-            <li key={product.id}>
-              <button
-                type="button"
-                onClick={() => onPick(product.id)}
-                className="flex min-h-11 w-full items-center justify-between gap-3 px-3 py-2 text-left hover:bg-slate-50"
-              >
-                <span className="truncate font-medium">{product.name}</span>
-                <span className="shrink-0 text-sm text-slate-500 tabular-nums">
-                  {formatQuantity(product.quantity)} {unitShort(product.unit)}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-}
-
 export function MovementFormPage() {
   const business = useActiveBusiness()
   const canWrite = useCanWrite(business.id)
@@ -347,7 +285,7 @@ export function MovementFormPage() {
 
       <Card className="flex flex-col gap-4">
         {!productId ? (
-          <ProductPicker onPick={(id) => setParam('producto', id)} />
+          <ProductPicker onPick={(picked) => setParam('producto', picked.id)} />
         ) : product.isError ? (
           <Alert tone="error">{toUserMessage(product.error)}</Alert>
         ) : product.isPending ? (

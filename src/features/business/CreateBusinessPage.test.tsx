@@ -63,7 +63,10 @@ describe('CreateBusinessPage', () => {
     const { setActiveId } = renderPage()
 
     await userEvent.type(screen.getByLabelText('Nombre del negocio'), '  Tienda Doña Rosa ')
-    await userEvent.selectOptions(screen.getByLabelText('Tipo de negocio (opcional)'), 'minimercado')
+    await userEvent.selectOptions(
+      screen.getByLabelText('Tipo de negocio (opcional)'),
+      'minimercado',
+    )
     await userEvent.click(screen.getByRole('button', { name: 'Crear negocio' }))
 
     expect(await screen.findByText('Inicio')).toBeInTheDocument()
@@ -75,7 +78,10 @@ describe('CreateBusinessPage', () => {
   })
 
   it('muestra un mensaje entendible si el servidor rechaza la creación', async () => {
-    rpc.mockResolvedValue({ data: null, error: { code: 'P0001', message: 'business_limit_reached' } })
+    rpc.mockResolvedValue({
+      data: null,
+      error: { code: 'P0001', message: 'business_limit_reached' },
+    })
     renderPage()
 
     await userEvent.type(screen.getByLabelText('Nombre del negocio'), 'Otra tienda')

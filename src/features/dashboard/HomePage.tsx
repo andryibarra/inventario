@@ -5,11 +5,14 @@ import { Card } from '../../components/ui/Card'
 import { LinkButton } from '../../components/ui/LinkButton'
 import { toUserMessage } from '../../lib/errors'
 import { formatMoney, formatQuantity } from '../../lib/format'
+import { canManageBusiness } from '../business/api'
 import { useActiveBusiness } from '../business/BusinessContext'
 import { fetchMovements, fetchSummary, movementKeys } from '../inventory/api'
 import { MovementList } from '../inventory/MovementList'
 import { fetchProducts, productKeys } from '../products/api'
 import { unitShort } from '../products/units'
+import { fetchSalesSummary, saleKeys } from '../sales/api'
+import { todayIn } from '../sales/periods'
 import { useCanWrite } from '../subscription/useCanWrite'
 
 type Step = { label: string; done: boolean; to: string }
@@ -41,6 +44,11 @@ export function HomePage() {
     queryKey: movementKeys.list(business.id, RECENT),
     queryFn: () => fetchMovements(business.id, RECENT),
   })
+  const today = todayIn(business.timezone)
+  const todaySales = useQuery({
+    queryKey: saleKeys.summary(business.id, { from: today, to: today }),
+    queryFn: () => fetchSalesSummary(business.id, { from: today, to: today }),
+  })
   const lowStock = useQuery({
     queryKey: productKeys.list(business.id, LOW_STOCK),
     queryFn: () => fetchProducts(business.id, LOW_STOCK),
@@ -52,14 +60,14 @@ export function HomePage() {
     { label: 'Crear tu negocio', done: true, to: '/configuracion' },
     { label: 'Agregar tu primer producto', done: hasProducts, to: '/productos/nuevo' },
     {
-      label: 'Registrar una entrada o una salida',
+      label: 'Registrar una venta o una entrada de mercancía',
       done: hasMovements,
-      to: '/inventario/registrar',
+      to: '/ventas/nueva',
     },
   ]
   const doneCount = steps.filter((step) => step.done).length
   const showSteps = summary.isSuccess && recent.isSuccess && doneCount < steps.length
-  const error = summary.error ?? recent.error ?? lowStock.error
+  const error = summary.error ?? recent.error ?? lowStock.error ?? todaySales.error
 
   return (
     <div className="flex flex-col gap-6">
@@ -107,20 +115,33 @@ export function HomePage() {
 
       {canWrite && (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <LinkButton to="/inventario/registrar?tipo=entrada">Registrar entrada</LinkButton>
-          <LinkButton to="/inventario/registrar?tipo=salida" variant="secondary">
-            Registrar salida
+          <LinkButton to="/ventas/nueva">Registrar venta</LinkButton>
+          <LinkButton to="/inventario/registrar?tipo=entrada" variant="secondary">
+            Registrar entrada
           </LinkButton>
           <LinkButton to="/productos/nuevo" variant="secondary">
             Agregar producto
           </LinkButton>
-          <LinkButton to="/inventario/registrar?tipo=ajuste" variant="secondary">
-            Ajustar conteo
-          </LinkButton>
+          {canManageBusiness(business.role) ? (
+            <LinkButton to="/productos/importar" variant="secondary">
+              Importar Excel
+            </LinkButton>
+          ) : (
+            <LinkButton to="/inventario/registrar?tipo=ajuste" variant="secondary">
+              Ajustar conteo
+            </LinkButton>
+          )}
         </div>
       )}
 
-      <section aria-label="Resumen" className="grid gap-3 sm:grid-cols-3">
+      <section aria-label="Resumen" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatTile
+          label={
+            todaySales.data ? `Ventas de hoy (${todaySales.data.salesCount})` : 'Ventas de hoy'
+          }
+          value={todaySales.data ? formatMoney(todaySales.data.total, business.currency) : '—'}
+          to="/ventas"
+        />
         <StatTile
           label="Productos activos"
           value={summary.data ? formatQuantity(summary.data.activeProducts) : '—'}

@@ -13,6 +13,10 @@ import { HomePage } from '../features/dashboard/HomePage'
 import { ImportPage } from '../features/imports/ImportPage'
 import { MovementFormPage } from '../features/inventory/MovementFormPage'
 import { MovementsPage } from '../features/inventory/MovementsPage'
+import { NewSalePage } from '../features/sales/NewSalePage'
+import { ReportsPage } from '../features/sales/ReportsPage'
+import { SaleDetailPage } from '../features/sales/SaleDetailPage'
+import { SalesPage } from '../features/sales/SalesPage'
 import { CategoriesPage } from '../features/products/CategoriesPage'
 import { ProductDetailPage } from '../features/products/ProductDetailPage'
 import { ProductFormPage } from '../features/products/ProductFormPage'
@@ -44,6 +48,10 @@ export function App() {
               <Route element={<RequireBusiness />}>
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/ventas" element={<SalesPage />} />
+                  <Route path="/ventas/nueva" element={<NewSalePage />} />
+                  <Route path="/ventas/:saleId" element={<SaleDetailPage />} />
+                  <Route path="/reportes" element={<ReportsPage />} />
                   <Route path="/productos" element={<ProductsPage />} />
                   <Route path="/productos/nuevo" element={<ProductFormPage />} />
                   <Route path="/productos/categorias" element={<CategoriesPage />} />

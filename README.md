@@ -37,7 +37,8 @@ en local: se ven en Mailpit, en la URL que muestra `npx supabase status`
 | `npm run build` | Build de producción |
 | `npm run db:start` / `db:stop` | Encender / apagar Supabase local |
 | `npm run db:reset` | Recrear la base local desde las migraciones + `seed.sql` |
-| `npm run db:test` | Pruebas pgTAP (aislamiento entre negocios, estructura) |
+| `npm run db:test` | Pruebas pgTAP (aislamiento entre negocios, estructura, stock, ventas) |
+| `npm run db:test:concurrencia` | Ventas simultáneas sobre el último stock (requiere Supabase local) |
 | `npm run db:types` | Regenerar `src/types/database.ts` desde la base local |
 
 ## Reglas del proyecto
@@ -47,7 +48,9 @@ en local: se ven en Mailpit, en la URL que muestra `npx supabase status`
    ([ADR 0002](docs/decisiones/0002-stock-y-costo-promedio.md)).
 3. **Importar nunca escribe sin vista previa y confirmación**, y es todo o nada
    ([ADR 0003](docs/decisiones/0003-importacion.md)).
-4. Cambios de base de datos solo con migraciones nuevas en `supabase/migrations/`
+4. **Las ventas no se borran: se anulan** con movimientos compensatorios; los saldos se bloquean
+   en orden por producto ([ADR 0004](docs/decisiones/0004-ventas.md)).
+5. Cambios de base de datos solo con migraciones nuevas en `supabase/migrations/`
    (`npx supabase migration new <nombre>`). Nunca editar una migración ya aplicada.
-5. Toda función nueva que escriba datos lleva pruebas de aislamiento en `supabase/tests/`.
-6. Solo claves públicas con prefijo `VITE_`. La clave secreta / service_role nunca va al frontend.
+6. Toda función nueva que escriba datos lleva pruebas de aislamiento en `supabase/tests/`.
+7. Solo claves públicas con prefijo `VITE_`. La clave secreta / service_role nunca va al frontend.

@@ -16,6 +16,7 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
+    "db:test:concurrencia": "bash scripts/test-concurrencia.sh",
     "db:types": "supabase gen types typescript --local > src/types/database.ts"
   },
   "dependencies": {

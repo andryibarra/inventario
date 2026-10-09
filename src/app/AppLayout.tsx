@@ -3,12 +3,14 @@ import { useActiveBusiness, useBusinesses } from '../features/business/BusinessC
 import { SubscriptionBanner } from '../features/subscription/SubscriptionBanner'
 import { useSubscription } from '../features/subscription/useSubscription'
 
-// Las secciones se agregan a medida que cada fase queda lista.
+// En el celular caben cinco: Movimientos se abre desde Inicio y desde cada producto.
 const NAV_ITEMS = [
-  { to: '/', label: 'Inicio', icon: '⌂' },
-  { to: '/productos', label: 'Productos', icon: '▦' },
-  { to: '/inventario', label: 'Movimientos', icon: '⇅' },
-  { to: '/configuracion', label: 'Configuración', icon: '⚙' },
+  { to: '/', label: 'Inicio', icon: '⌂', mobile: true },
+  { to: '/ventas', label: 'Ventas', icon: '$', mobile: true },
+  { to: '/productos', label: 'Productos', icon: '▦', mobile: true },
+  { to: '/inventario', label: 'Movimientos', icon: '⇅', mobile: false },
+  { to: '/reportes', label: 'Reportes', icon: '▤', mobile: true },
+  { to: '/configuracion', label: 'Configuración', icon: '⚙', mobile: true },
 ] as const
 
 function BusinessSwitcher() {
@@ -37,7 +39,7 @@ function BusinessSwitcher() {
 }
 
 function navClass({ isActive }: { isActive: boolean }): string {
-  return `flex flex-1 flex-col items-center gap-0.5 rounded-lg px-3 py-2 text-xs font-medium md:flex-none md:flex-row md:gap-2 md:text-sm ${
+  return `flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-2 text-xs font-medium md:flex-none md:px-3 md:flex-row md:gap-2 md:text-sm ${
     isActive ? 'text-brand-700 md:bg-brand-50' : 'text-slate-600 hover:text-slate-900'
   }`
 }
@@ -77,7 +79,7 @@ export function AppLayout() {
         aria-label="Principal"
         className="fixed inset-x-0 bottom-0 flex border-t border-slate-200 bg-white px-2 pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        {NAV_ITEMS.map((item) => (
+        {NAV_ITEMS.filter((item) => item.mobile).map((item) => (
           <NavLink key={item.to} to={item.to} end={item.to === '/'} className={navClass}>
             <span aria-hidden="true" className="text-lg leading-none">
               {item.icon}

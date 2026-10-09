@@ -49,3 +49,5 @@ jobs:
       - run: npm ci
       - run: npx supabase db start
       - run: npx supabase test db
+      - name: Ventas simultáneas no descuadran el stock
+        run: npm run db:test:concurrencia
