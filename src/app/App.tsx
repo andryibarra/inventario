@@ -10,6 +10,12 @@ import { CreateBusinessPage } from '../features/business/CreateBusinessPage'
 import { RequireBusiness } from '../features/business/RequireBusiness'
 import { SettingsPage } from '../features/business/SettingsPage'
 import { HomePage } from '../features/dashboard/HomePage'
+import { MovementFormPage } from '../features/inventory/MovementFormPage'
+import { MovementsPage } from '../features/inventory/MovementsPage'
+import { CategoriesPage } from '../features/products/CategoriesPage'
+import { ProductDetailPage } from '../features/products/ProductDetailPage'
+import { ProductFormPage } from '../features/products/ProductFormPage'
+import { ProductsPage } from '../features/products/ProductsPage'
 import { AppLayout } from './AppLayout'
 import { NotFoundPage } from './NotFoundPage'
 
@@ -37,6 +43,13 @@ export function App() {
               <Route element={<RequireBusiness />}>
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/productos" element={<ProductsPage />} />
+                  <Route path="/productos/nuevo" element={<ProductFormPage />} />
+                  <Route path="/productos/categorias" element={<CategoriesPage />} />
+                  <Route path="/productos/:productId" element={<ProductDetailPage />} />
+                  <Route path="/productos/:productId/editar" element={<ProductFormPage />} />
+                  <Route path="/inventario" element={<MovementsPage />} />
+                  <Route path="/inventario/registrar" element={<MovementFormPage />} />
                   <Route path="/configuracion" element={<SettingsPage />} />
                 </Route>
               </Route>

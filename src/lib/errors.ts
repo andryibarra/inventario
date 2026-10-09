@@ -11,6 +11,25 @@ const DB_MESSAGES: Record<string, string> = {
   invalid_timezone: 'La zona horaria no es válida.',
   invalid_display_name: 'El nombre debe tener máximo 80 caracteres.',
   business_limit_reached: 'Alcanzaste el máximo de negocios por cuenta.',
+  invalid_price: 'El precio no es válido.',
+  invalid_unit: 'La unidad no es válida.',
+  invalid_sku: 'La referencia debe tener máximo 60 caracteres.',
+  invalid_barcode: 'El código de barras debe tener máximo 60 caracteres.',
+  invalid_threshold: 'El aviso de stock bajo no es válido.',
+  invalid_quantity: 'La cantidad no es válida.',
+  invalid_unit_cost: 'El costo por unidad no es válido.',
+  invalid_reason: 'Escribe un motivo de máximo 200 caracteres.',
+  invalid_category_name: 'El nombre de la categoría debe tener entre 1 y 60 caracteres.',
+  invalid_movement_type: 'Ese tipo de movimiento no se puede registrar aquí.',
+  duplicate_sku: 'Ya tienes otro producto con esa referencia.',
+  duplicate_barcode: 'Ya tienes otro producto con ese código de barras.',
+  duplicate_product: 'Ese producto ya existe.',
+  duplicate_category: 'Ya existe una categoría con ese nombre.',
+  category_not_found: 'La categoría ya no existe. Recarga la página.',
+  product_not_found: 'El producto ya no existe. Recarga la página.',
+  product_inactive: 'El producto está archivado. Reactívalo para registrar entradas o salidas.',
+  insufficient_stock: 'No hay suficientes unidades disponibles para esa salida.',
+  no_change: 'La cantidad contada es igual a la que ya tienes. No hay nada que ajustar.',
 }
 
 const AUTH_MESSAGES: Record<string, string> = {
@@ -20,7 +39,8 @@ const AUTH_MESSAGES: Record<string, string> = {
   email_exists: 'Ya existe una cuenta con ese correo.',
   weak_password: 'La contraseña es muy débil. Usa al menos 8 caracteres.',
   same_password: 'La nueva contraseña debe ser diferente a la anterior.',
-  over_email_send_rate_limit: 'Enviamos demasiados correos. Espera unos minutos e intenta de nuevo.',
+  over_email_send_rate_limit:
+    'Enviamos demasiados correos. Espera unos minutos e intenta de nuevo.',
   over_request_rate_limit: 'Demasiados intentos. Espera unos minutos e intenta de nuevo.',
 }
 

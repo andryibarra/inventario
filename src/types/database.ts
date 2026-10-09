@@ -57,6 +57,84 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"categories": {
+                  Row: {
+                    "business_id": string,"created_at": string,"id": string,"name": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "business_id": string,"created_at"?: string,"id"?: string,"name": string
+                  }
+                  Update: {
+                    "business_id"?: string,"created_at"?: string,"id"?: string,"name"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "categories_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"inventory_balances": {
+                  Row: {
+                    "average_cost": number,"business_id": string,"product_id": string,"quantity": number,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "average_cost"?: number,"business_id": string,"product_id": string,"quantity"?: number,"updated_at"?: string
+                  }
+                  Update: {
+                    "average_cost"?: number,"business_id"?: string,"product_id"?: string,"quantity"?: number,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inventory_balances_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inventory_balances_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: true
+      referencedRelation: "product_overview"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "inventory_balances_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: true
+      referencedRelation: "products"
+      referencedColumns: ["business_id","id"]
+    }
+                  ]
+                },"products": {
+                  Row: {
+                    "barcode": string | null,"business_id": string,"category_id": string | null,"created_at": string,"created_by": string | null,"id": string,"idempotency_key": string | null,"is_active": boolean,"low_stock_threshold": number,"name": string,"sale_price": number,"sku": string | null,"unit": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "barcode"?: string | null,"business_id": string,"category_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"idempotency_key"?: string | null,"is_active"?: boolean,"low_stock_threshold"?: number,"name": string,"sale_price"?: number,"sku"?: string | null,"unit"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "barcode"?: string | null,"business_id"?: string,"category_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"idempotency_key"?: string | null,"is_active"?: boolean,"low_stock_threshold"?: number,"name"?: string,"sale_price"?: number,"sku"?: string | null,"unit"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "products_business_id_category_id_fkey"
+      columns: ["business_id","category_id"]
+isOneToOne: false
+      referencedRelation: "categories"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "products_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"profiles": {
                   Row: {
                     "created_at": string,"display_name": string | null,"id": string
@@ -70,6 +148,38 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"stock_movements": {
+                  Row: {
+                    "average_cost_after": number,"balance_after": number,"business_id": string,"created_at": string,"created_by": string | null,"id": string,"idempotency_key": string | null,"movement_type": Database["public"]['Enums']["movement_type"],"product_id": string,"quantity_delta": number,"reason": string | null,"reference_id": string | null,"reference_type": string | null,"unit_cost": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "average_cost_after": number,"balance_after": number,"business_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"idempotency_key"?: string | null,"movement_type": Database["public"]['Enums']["movement_type"],"product_id": string,"quantity_delta": number,"reason"?: string | null,"reference_id"?: string | null,"reference_type"?: string | null,"unit_cost": number
+                  }
+                  Update: {
+                    "average_cost_after"?: number,"balance_after"?: number,"business_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"idempotency_key"?: string | null,"movement_type"?: Database["public"]['Enums']["movement_type"],"product_id"?: string,"quantity_delta"?: number,"reason"?: string | null,"reference_id"?: string | null,"reference_type"?: string | null,"unit_cost"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "stock_movements_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "stock_movements_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "product_overview"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "stock_movements_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["business_id","id"]
+    }
                   ]
                 },"subscriptions": {
                   Row: {
@@ -94,21 +204,131 @@ isOneToOne: true
                 }
           }
           Views: {
-            [_ in never]: never
+            "inventory_summary": {
+                  Row: {
+                    "active_products": number | null,"business_id": string | null,"low_stock_products": number | null,"stock_value": number | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "products_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"movement_history": {
+                  Row: {
+                    "average_cost_after": number | null,"balance_after": number | null,"business_id": string | null,"created_at": string | null,"created_by": string | null,"id": string | null,"movement_type": Database["public"]['Enums']["movement_type"] | null,"product_id": string | null,"product_name": string | null,"quantity_delta": number | null,"reason": string | null,"unit": string | null,"unit_cost": number | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "stock_movements_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "stock_movements_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "product_overview"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "stock_movements_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["business_id","id"]
+    }
+                  ]
+                },"product_overview": {
+                  Row: {
+                    "average_cost": number | null,"barcode": string | null,"business_id": string | null,"category_id": string | null,"category_name": string | null,"created_at": string | null,"id": string | null,"is_active": boolean | null,"is_low_stock": boolean | null,"low_stock_threshold": number | null,"name": string | null,"quantity": number | null,"sale_price": number | null,"sku": string | null,"stock_value": number | null,"unit": string | null,"updated_at": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "products_business_id_category_id_fkey"
+      columns: ["business_id","category_id"]
+isOneToOne: false
+      referencedRelation: "categories"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "products_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"stock_reconciliation": {
+                  Row: {
+                    "balance_quantity": number | null,"business_id": string | null,"movements_quantity": number | null,"product_id": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "inventory_balances_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inventory_balances_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: true
+      referencedRelation: "product_overview"
+      referencedColumns: ["business_id","id"]
+    },{
+      foreignKeyName: "inventory_balances_business_id_product_id_fkey"
+      columns: ["business_id","product_id"]
+isOneToOne: true
+      referencedRelation: "products"
+      referencedColumns: ["business_id","id"]
+    }
+                  ]
+                }
           }
           Functions: {
-            "create_business":
+            "adjust_stock":
+{ Args: { "p_business_id": string,"p_counted_quantity": number,"p_idempotency_key"?: string,"p_product_id": string,"p_reason": string }; Returns: string
+                           },
+"create_business":
 { Args: { "p_business_type"?: string,"p_name": string }; Returns: string
+                           },
+"create_category":
+{ Args: { "p_business_id": string,"p_name": string }; Returns: string
+                           },
+"create_product":
+{ Args: { "p_barcode"?: string,"p_business_id": string,"p_category_id"?: string,"p_idempotency_key"?: string,"p_initial_quantity"?: number,"p_initial_unit_cost"?: number,"p_low_stock_threshold"?: number,"p_name": string,"p_sale_price": number,"p_sku"?: string,"p_unit"?: string }; Returns: string
+                           },
+"delete_category":
+{ Args: { "p_business_id": string,"p_category_id": string }; Returns: undefined
+                           },
+"record_stock_movement":
+{ Args: { "p_business_id": string,"p_idempotency_key"?: string,"p_product_id": string,"p_quantity": number,"p_reason"?: string,"p_type": Database["public"]['Enums']["movement_type"],"p_unit_cost"?: number }; Returns: string
+                           },
+"rename_category":
+{ Args: { "p_business_id": string,"p_category_id": string,"p_name": string }; Returns: undefined
+                           },
+"set_product_active":
+{ Args: { "p_active": boolean,"p_business_id": string,"p_product_id": string }; Returns: undefined
                            },
 "update_business":
 { Args: { "p_business_id": string,"p_business_type"?: string,"p_name": string,"p_timezone"?: string }; Returns: undefined
                            },
 "update_my_profile":
 { Args: { "p_display_name": string }; Returns: undefined
+                           },
+"update_product":
+{ Args: { "p_barcode"?: string,"p_business_id": string,"p_category_id"?: string,"p_low_stock_threshold"?: number,"p_name": string,"p_product_id": string,"p_sale_price": number,"p_sku"?: string,"p_unit"?: string }; Returns: undefined
                            }
           }
           Enums: {
-            "business_status": "active"|"suspended","member_role": "owner"|"admin"|"staff","member_status": "active"|"revoked","subscription_status": "trialing"|"active"|"past_due"|"expired"|"cancelled"
+            "business_status": "active"|"suspended","member_role": "owner"|"admin"|"staff","member_status": "active"|"revoked","movement_type": "initial"|"purchase"|"output"|"adjustment"|"sale"|"sale_reversal"|"return","subscription_status": "trialing"|"active"|"past_due"|"expired"|"cancelled"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -228,7 +448,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "business_status": ["active", "suspended"],"member_role": ["owner", "admin", "staff"],"member_status": ["active", "revoked"],"subscription_status": ["trialing", "active", "past_due", "expired", "cancelled"]
+            "business_status": ["active", "suspended"],"member_role": ["owner", "admin", "staff"],"member_status": ["active", "revoked"],"movement_type": ["initial", "purchase", "output", "adjustment", "sale", "sale_reversal", "return"],"subscription_status": ["trialing", "active", "past_due", "expired", "cancelled"]
           }
         }
 } as const

@@ -6,6 +6,8 @@ import { useSubscription } from '../features/subscription/useSubscription'
 // Las secciones se agregan a medida que cada fase queda lista.
 const NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: '⌂' },
+  { to: '/productos', label: 'Productos', icon: '▦' },
+  { to: '/inventario', label: 'Movimientos', icon: '⇅' },
   { to: '/configuracion', label: 'Configuración', icon: '⚙' },
 ] as const
 

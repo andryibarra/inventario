@@ -43,7 +43,9 @@ en local: se ven en Mailpit, en la URL que muestra `npx supabase status`
 ## Reglas del proyecto
 
 1. **Se lee con RLS, se escribe con RPC** ([ADR 0001](docs/decisiones/0001-escrituras-por-rpc.md)).
-2. Cambios de base de datos solo con migraciones nuevas en `supabase/migrations/`
+2. **El stock solo cambia con movimientos**, nunca editando el saldo; costo promedio ponderado
+   ([ADR 0002](docs/decisiones/0002-stock-y-costo-promedio.md)).
+3. Cambios de base de datos solo con migraciones nuevas en `supabase/migrations/`
    (`npx supabase migration new <nombre>`). Nunca editar una migración ya aplicada.
-3. Toda función nueva que escriba datos lleva pruebas de aislamiento en `supabase/tests/`.
-4. Solo claves públicas con prefijo `VITE_`. La clave secreta / service_role nunca va al frontend.
+4. Toda función nueva que escriba datos lleva pruebas de aislamiento en `supabase/tests/`.
+5. Solo claves públicas con prefijo `VITE_`. La clave secreta / service_role nunca va al frontend.
