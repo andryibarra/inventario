@@ -77,6 +77,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"imports": {
+                  Row: {
+                    "adjust_stock": boolean,"business_id": string,"created_at": string,"created_by": string | null,"file_name": string,"finished_at": string | null,"id": string,"rows_created": number,"rows_skipped": number,"rows_stock_adjusted": number,"rows_total": number,"rows_updated": number,"status": string,"update_existing": boolean
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "adjust_stock": boolean,"business_id": string,"created_at"?: string,"created_by"?: string | null,"file_name": string,"finished_at"?: string | null,"id": string,"rows_created"?: number,"rows_skipped"?: number,"rows_stock_adjusted"?: number,"rows_total"?: number,"rows_updated"?: number,"status"?: string,"update_existing": boolean
+                  }
+                  Update: {
+                    "adjust_stock"?: boolean,"business_id"?: string,"created_at"?: string,"created_by"?: string | null,"file_name"?: string,"finished_at"?: string | null,"id"?: string,"rows_created"?: number,"rows_skipped"?: number,"rows_stock_adjusted"?: number,"rows_total"?: number,"rows_updated"?: number,"status"?: string,"update_existing"?: boolean
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "imports_business_id_fkey"
+      columns: ["business_id"]
+isOneToOne: false
+      referencedRelation: "businesses"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"inventory_balances": {
                   Row: {
                     "average_cost": number,"business_id": string,"product_id": string,"quantity": number,"updated_at": string
@@ -307,6 +327,9 @@ isOneToOne: true
                            },
 "delete_category":
 { Args: { "p_business_id": string,"p_category_id": string }; Returns: undefined
+                           },
+"import_products":
+{ Args: { "p_adjust_stock"?: boolean,"p_business_id": string,"p_file_name": string,"p_import_id": string,"p_rows": Json,"p_rows_invalid"?: number,"p_rows_total"?: number,"p_update_existing"?: boolean }; Returns: Json
                            },
 "record_stock_movement":
 { Args: { "p_business_id": string,"p_idempotency_key"?: string,"p_product_id": string,"p_quantity": number,"p_reason"?: string,"p_type": Database["public"]['Enums']["movement_type"],"p_unit_cost"?: number }; Returns: string

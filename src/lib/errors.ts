@@ -30,6 +30,14 @@ const DB_MESSAGES: Record<string, string> = {
   product_inactive: 'El producto está archivado. Reactívalo para registrar entradas o salidas.',
   insufficient_stock: 'No hay suficientes unidades disponibles para esa salida.',
   no_change: 'La cantidad contada es igual a la que ya tienes. No hay nada que ajustar.',
+  import_empty: 'El archivo no tiene productos para importar.',
+  import_too_many_rows: 'El archivo tiene más de 2.000 productos. Divídelo en partes.',
+  import_invalid_options:
+    'Para reemplazar las cantidades también debes permitir actualizar los productos existentes.',
+  import_invalid_row: 'Una fila del archivo no tiene el formato esperado.',
+  import_ambiguous_match: 'La referencia y el código de barras corresponden a productos distintos.',
+  invalid_import_id: 'No pudimos identificar la importación. Vuelve a empezar.',
+  invalid_file_name: 'El nombre del archivo no es válido.',
 }
 
 const AUTH_MESSAGES: Record<string, string> = {

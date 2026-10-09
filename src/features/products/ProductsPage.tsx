@@ -9,6 +9,7 @@ import { LinkButton } from '../../components/ui/LinkButton'
 import { Spinner } from '../../components/ui/Spinner'
 import { toUserMessage } from '../../lib/errors'
 import { formatMoney, formatQuantity } from '../../lib/format'
+import { canManageBusiness } from '../business/api'
 import { useActiveBusiness } from '../business/BusinessContext'
 import { useCanWrite } from '../subscription/useCanWrite'
 import {
@@ -66,6 +67,7 @@ function ProductRow({ product, currency }: { product: Product; currency: string 
 export function ProductsPage() {
   const business = useActiveBusiness()
   const canWrite = useCanWrite(business.id)
+  const canImport = canManageBusiness(business.role)
   const [params, setParams] = useSearchParams()
   const [search, setSearch] = useState(params.get('q') ?? '')
   const deferredSearch = useDeferredValue(search)
@@ -117,7 +119,16 @@ export function ProductsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-slate-900">Productos</h1>
-        {canWrite && <LinkButton to="/productos/nuevo">Agregar producto</LinkButton>}
+        {canWrite && (
+          <div className="flex gap-2">
+            {canImport && (
+              <LinkButton to="/productos/importar" variant="secondary">
+                Importar Excel
+              </LinkButton>
+            )}
+            <LinkButton to="/productos/nuevo">Agregar producto</LinkButton>
+          </div>
+        )}
       </div>
 
       <FlashMessage />
@@ -199,11 +210,20 @@ export function ProductsPage() {
           <EmptyState
             title="Aún no tienes productos"
             action={
-              canWrite && <LinkButton to="/productos/nuevo">Agregar mi primer producto</LinkButton>
+              canWrite && (
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <LinkButton to="/productos/nuevo">Agregar mi primer producto</LinkButton>
+                  {canImport && (
+                    <LinkButton to="/productos/importar" variant="secondary">
+                      Importar desde Excel
+                    </LinkButton>
+                  )}
+                </div>
+              )
             }
           >
-            Agrega los productos que vendes con su cantidad actual. Toma menos de un minuto cada
-            uno.
+            Agrega los productos que vendes con su cantidad actual, o sube el Excel donde ya los
+            tienes.
           </EmptyState>
         )
       ) : (

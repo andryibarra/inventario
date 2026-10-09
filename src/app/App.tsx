@@ -10,6 +10,7 @@ import { CreateBusinessPage } from '../features/business/CreateBusinessPage'
 import { RequireBusiness } from '../features/business/RequireBusiness'
 import { SettingsPage } from '../features/business/SettingsPage'
 import { HomePage } from '../features/dashboard/HomePage'
+import { ImportPage } from '../features/imports/ImportPage'
 import { MovementFormPage } from '../features/inventory/MovementFormPage'
 import { MovementsPage } from '../features/inventory/MovementsPage'
 import { CategoriesPage } from '../features/products/CategoriesPage'
@@ -46,6 +47,7 @@ export function App() {
                   <Route path="/productos" element={<ProductsPage />} />
                   <Route path="/productos/nuevo" element={<ProductFormPage />} />
                   <Route path="/productos/categorias" element={<CategoriesPage />} />
+                  <Route path="/productos/importar" element={<ImportPage />} />
                   <Route path="/productos/:productId" element={<ProductDetailPage />} />
                   <Route path="/productos/:productId/editar" element={<ProductFormPage />} />
                   <Route path="/inventario" element={<MovementsPage />} />

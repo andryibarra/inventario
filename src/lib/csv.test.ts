@@ -12,7 +12,7 @@ const columns = [
 describe('toCsv', () => {
   it('usa ";" como separador, coma decimal, BOM y CRLF', () => {
     const csv = toCsv([{ name: 'Arroz', qty: 10.5, note: null }], columns)
-    expect(csv).toBe('﻿Nombre;Cantidad;Nota\r\nArroz;10,5;\r\n')
+    expect(csv).toBe('\uFEFFNombre;Cantidad;Nota\r\nArroz;10,5;\r\n')
   })
 
   it('escapa separadores, comillas y saltos de línea', () => {
