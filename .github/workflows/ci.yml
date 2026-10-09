@@ -28,8 +28,11 @@ jobs:
           VITE_SUPABASE_URL: http://127.0.0.1:54321
           VITE_SUPABASE_PUBLISHABLE_KEY: ci-placeholder
       - name: El build no contiene claves secretas
+        # Busca claves completas, no solo el prefijo: supabase-js incluye el
+        # texto "sb_secret_" para reconocer tipos de clave.
+        # Las tres variantes base64 corresponden a "service_role" dentro de un JWT.
         run: |
-          if grep -rEl "service_role|sb_secret_" dist/; then
+          if grep -rEl "sb_secret_[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*(c2VydmljZV9yb2xl|NlcnZpY2Vfcm9sZ|zZXJ2aWNlX3JvbG)" dist/; then
             echo "Se encontró una posible clave secreta en el build" >&2
             exit 1
           fi
