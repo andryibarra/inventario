@@ -1,0 +1,22 @@
+node_modules
+dist
+coverage
+*.tsbuildinfo
+
+# Variables de entorno: nunca subir claves reales
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.temp
+supabase/.branches
+supabase/signing_keys.json
+
+# Editores / SO
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+*.log

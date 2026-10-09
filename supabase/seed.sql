@@ -1,0 +1,3 @@
+-- Datos de desarrollo local. Se ejecuta con `npm run db:reset`.
+-- Por ahora vacío: los usuarios se crean desde la pantalla de registro y los
+-- correos de confirmación llegan a Mailpit (ver README).
